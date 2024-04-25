@@ -1,0 +1,141 @@
+afc_clear_military_fleet_stance_flags = {
+	if = {
+		limit = { has_country_flag = afc_auto_military_fleet_stance_aggressive }
+		remove_country_flag = afc_auto_military_fleet_stance_aggressive
+	}
+	if = {
+		limit = { has_country_flag = afc_auto_military_fleet_stance_passive }
+		remove_country_flag = afc_auto_military_fleet_stance_passive
+	}
+}
+
+afc_clear_bombardment_stance_flags = {
+	if= {
+		limit = { has_country_flag = afc_auto_bombardment_stance_selective }
+		remove_country_flag = afc_auto_bombardment_stance_selective
+	}
+	if= {
+		limit = { has_country_flag = afc_auto_bombardment_stance_indiscriminate }
+		remove_country_flag = afc_auto_bombardment_stance_indiscriminate
+	}
+	if= {
+		limit = { has_country_flag = afc_auto_bombardment_stance_armageddon }
+		remove_country_flag = afc_auto_bombardment_stance_armageddon
+	}
+	if= {
+		limit = { has_country_flag = afc_auto_bombardment_stance_pox }
+		remove_country_flag = afc_auto_bombardment_stance_pox
+	}
+	if= {
+		limit = { has_country_flag = afc_auto_bombardment_stance_raiding }
+		remove_country_flag = afc_auto_bombardment_stance_raiding
+	}
+}
+
+afc_clear_transport_fleet_stance_flags = {
+	if = {
+		limit = { has_country_flag = afc_auto_transport_fleet_stance_aggressive }
+		remove_country_flag = afc_auto_transport_fleet_stance_aggressive
+	}
+	if = {
+		limit = { has_country_flag = afc_auto_transport_fleet_stance_passive }
+		remove_country_flag = afc_auto_transport_fleet_stance_passive
+	}
+	if = {
+		limit = { has_country_flag = afc_auto_transport_fleet_stance_evasive }
+		remove_country_flag = afc_auto_transport_fleet_stance_evasive
+	}
+}
+
+afc_clear_constructor_fleet_stance_flags = {
+	if = {
+		limit = { has_country_flag = afc_auto_constructor_fleet_stance_passive }
+		remove_country_flag = afc_auto_constructor_fleet_stance_passive
+	}
+	if = {
+		limit = { has_country_flag = afc_auto_constructor_fleet_stance_evasive }
+		remove_country_flag = afc_auto_constructor_fleet_stance_evasive
+	}
+}
+
+afc_clear_science_fleet_stance_flags = {
+	if = {
+		limit = { has_country_flag = afc_auto_science_fleet_stance_passive }
+		remove_country_flag = afc_auto_science_fleet_stance_passive
+	}
+	if = {
+		limit = { has_country_flag = afc_auto_science_fleet_stance_evasive }
+		remove_country_flag = afc_auto_science_fleet_stance_evasive
+	}
+}
+
+afc_set_colossus_target_flag = {
+	set_timed_planet_flag = {
+		flag = auto_colossus_target_flag
+		years = 1
+	}
+}
+
+afc_clear_colossus_fleet_stance_flags = {
+	if = {
+		limit = { has_country_flag = afc_auto_colossus_fleet_stance_aggressive }
+		remove_country_flag = afc_auto_colossus_fleet_stance_aggressive
+	}
+	if = {
+		limit = { has_country_flag = afc_auto_colossus_fleet_stance_passive }
+		remove_country_flag = afc_auto_colossus_fleet_stance_passive
+	}
+	if = {
+		limit = { has_country_flag = afc_auto_colossus_fleet_stance_evasive }
+		remove_country_flag = afc_auto_colossus_fleet_stance_evasive
+	}
+}
+
+afc_clear_colossus_auto_target_flags = {
+	if = {
+		limit = { has_country_flag = afc_auto_colossus_target_same_system }
+		remove_country_flag = afc_auto_colossus_target_same_system
+	}
+	if = {
+		limit = { has_country_flag = afc_auto_colossus_target_any_system }
+		remove_country_flag = afc_auto_colossus_target_any_system
+	}
+}
+
+afc_clear_auto_bombardment_target_flags = {
+	if = {
+		limit = { has_country_flag = afc_auto_bombardment_target_random }
+		remove_country_flag = afc_auto_bombardment_target_random
+	}
+	if = {
+		limit = { has_country_flag = afc_auto_bombardment_target_army }
+		remove_country_flag = afc_auto_bombardment_target_army
+	}
+	if = {
+		limit = { has_country_flag = afc_auto_bombardment_target_pops }
+		remove_country_flag = afc_auto_bombardment_target_pops
+	}
+}
+
+afc_clear_bombardment_target_lock_flags = {
+	if = {
+		limit = { has_country_flag = afc_bombardment_target_lock_two }
+		remove_country_flag = afc_bombardment_target_lock_two
+	}
+	if = {
+		limit = { has_country_flag = afc_bombardment_target_lock_three }
+		remove_country_flag = afc_bombardment_target_lock_three
+	}
+	if = {
+		limit = { has_country_flag = afc_bombardment_target_lock_four }
+		remove_country_flag = afc_bombardment_target_lock_four
+	}
+	if = {
+		limit = { has_country_flag = afc_bombardment_target_lock_six }
+		remove_country_flag = afc_bombardment_target_lock_six
+	}
+	if = {
+		limit = { has_country_flag = afc_bombardment_target_lock_twelve }
+		remove_country_flag = afc_bombardment_target_lock_twelve
+	}
+}

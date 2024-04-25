@@ -1,0 +1,187 @@
+namespace = afc_bombardment
+
+# country event to make every fleet automatically bombard enemy planets (if applicable)
+country_event = {
+	id = afc_bombardment.100
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		OR = {
+			has_country_flag = afc_auto_bombardment_target_random
+			has_country_flag = afc_auto_bombardment_target_army
+			has_country_flag = afc_auto_bombardment_target_pops
+		}
+	}
+
+	immediate = {
+		every_controlled_fleet = {
+			fleet_event = { id = afc_bombardment.101 }
+		}
+	}
+}
+
+# send fleet to automatically bombard random enemy planets in the system
+fleet_event = {
+	id = afc_bombardment.101
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ship_class = shipclass_military
+		is_colossus_fleet = no
+		is_fleet_idle = yes
+		NOT = {
+			OR = {
+				has_fleet_flag = afc_moving_to_bombard
+				has_fleet_flag = afc_bombardment_target_locked
+			}
+		}
+		solar_system = {
+			any_system_colony = {
+				owner = { is_hostile = root.controller }
+				controller = { is_hostile = root.controller }
+			}
+		}
+	}
+
+	immediate = {
+		# find a planet to bombard
+		solar_system = {
+			random_system_colony = {
+				limit = {
+					owner = { is_hostile = root.controller }
+					controller = { is_hostile = root.controller }
+				}
+				weights = {
+					base = 1
+					modifier = {
+						add = trigger:planet_garrison_strength
+						root.controller = { has_country_flag = afc_auto_bombardment_target_army }
+					}
+					modifier = {
+						add = trigger:num_pops
+						root.controller = { has_country_flag = afc_auto_bombardment_target_pops }
+					}
+					
+				}
+				save_event_target_as = afc_bombard_this
+			}
+		}
+		# set a flag to indicate that we're moving to the planet
+		set_fleet_flag = afc_moving_to_bombard
+		# move the fleet to bombard the target
+		queue_actions = {
+			find_closest_planet = {
+				trigger = {
+					id = "afc_bombardment.101.trigger.1"
+					is_planet = event_target:afc_bombard_this
+				}
+				found_planet = {
+					#move_to = this
+					#wait = { duration = 5 }
+					orbit_planet = this
+					# remove the enroute flag and set the target lock timer
+					effect = {
+						id = "afc_bombardment.101.effect.1"
+						root = {
+							remove_fleet_flag = afc_moving_to_bombard
+							if = {
+								limit = { controller = { has_country_flag = afc_bombardment_target_lock_two } }
+								set_timed_fleet_flag = {
+									flag = afc_bombardment_target_locked
+									months = 2
+								}
+							} else_if = {
+								limit = { controller = { has_country_flag = afc_bombardment_target_lock_three } }
+								set_timed_fleet_flag = {
+									flag = afc_bombardment_target_locked
+									months = 3
+								}
+							} else_if = {
+								limit = { controller = { has_country_flag = afc_bombardment_target_lock_four } }
+								set_timed_fleet_flag = {
+									flag = afc_bombardment_target_locked
+									months = 4
+								}
+							} else_if = {
+								limit = { controller = { has_country_flag = afc_bombardment_target_lock_six } }
+								set_timed_fleet_flag = {
+									flag = afc_bombardment_target_locked
+									months = 6
+								}
+							} else_if = {
+								limit = { controller = { has_country_flag = afc_bombardment_target_lock_twelve } }
+								set_timed_fleet_flag = {
+									flag = afc_bombardment_target_locked
+									years = 1
+								}
+							} else = {
+								set_fleet_flag = afc_bombardment_target_locked
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# fleet has entered a new system - remove the "target lock" and/or enroute flag and clear the queued orders (if applicable)
+fleet_event = {
+	id = afc_bombardment.200
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			has_fleet_flag = afc_moving_to_bombard
+			has_fleet_flag = afc_bombardment_target_locked
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { has_fleet_flag = afc_moving_to_bombard }
+			remove_fleet_flag = afc_moving_to_bombard
+			clear_fleet_actions = this
+		}
+		if = {
+			limit = { has_fleet_flag = afc_bombardment_target_locked }
+			remove_fleet_flag = afc_bombardment_target_locked
+		}
+	}
+}
+
+# A planet has changed controller
+# Root = Planet
+# From = Planet Owner
+# FromFrom = Planet Controller (the one who is/was occupying)
+planet_event = {
+	id = afc_bombardment.201
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		solar_system = {
+			any_fleet_in_system = {
+				has_fleet_flag = afc_bombardment_target_locked
+				orbit = { is_same_value = root }
+			}
+		}
+	}
+
+	immediate = {
+		solar_system = {
+			every_fleet_in_system = {
+				limit = {
+					has_fleet_flag = afc_bombardment_target_locked
+					orbit = { is_same_value = root }
+				}
+				remove_fleet_flag = afc_bombardment_target_locked
+				fleet_event = { id = afc_bombardment.101 }
+			}
+		}
+	}
+}

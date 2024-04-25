@@ -1,0 +1,58 @@
+﻿l_korean:
+ edict_afc_manage_fleet_automation_edict: "Fleet Automation"
+ edict_afc_manage_fleet_automation_edict_desc: "Choose what fleet/bombardment stances your ships should use."
+
+ afc_manage_fleet_automation_event: "Manage Fleet Automation"
+ afc_manage_fleet_automation_event_desc: "Choose what fleet/bombard stance your ships should use. This can be set individually for military, transport, construction, and science fleets/ships. For example, you can set your military fleets to use the aggressive fleet stance while your transport fleets use the evasive fleet stance.\n\nAutomation is applied at the start of every month and when closing this window.\n\nSelect \"disabled\" to manually control your fleet/bombardment stances. Disabling automation will not revert any changes made by fleet/bombardment stance automation."
+
+ afc_military_fleet_stance_already_disabled: "Fleet stance automation is already disabled for military fleets."
+ afc_military_fleet_stance_already_aggressive: "Fleet stance automation is already set to aggressive for military fleets."
+ afc_military_fleet_stance_already_passive: "Fleet stance automation is already set to passive for military fleets."
+
+ afc_bombardment_stance_already_disabled: "Bombardment stance automation is already disabled."
+ afc_bombardment_stance_already_selective: "Bombardment stance automation is already set to selective bombardment."
+ afc_bombardment_stance_already_indiscriminate: "Bombardment stance automation is already set to indiscriminate bombardment."
+ afc_cannot_bombard_indiscriminate: "Your fleets cannot use indiscriminate bombardment."
+ afc_bombardment_stance_already_armageddon: "Bombardment stance automation is already set to armageddon bombardment."
+ afc_cannot_bombard_armageddon: "Your fleets cannot use armageddon bombardment."
+ afc_bombardment_stance_already_pox: "Bombardment stance automation is already set to Javorian Pox bombardment."
+ afc_cannot_bombard_pox: "Your fleets cannot use Javorian Pox bombardment."
+ afc_bombardment_stance_already_raiding: "Bombardment stance automation is already set to raiding bombardment."
+ afc_cannot_bombard_raiding: "Your fleets cannot use raiding bombardment."
+
+ afc_transport_fleet_stance_already_disabled: "Fleet stance automation is already disabled for transport fleets."
+ afc_transport_fleet_stance_already_aggressive: "Fleet stance automation is already set to aggressive for transport fleets."
+ afc_transport_fleet_stance_already_passive: "Fleet stance automation is already set to passive for transport fleets."
+ afc_transport_fleet_stance_already_evasive: "Fleet stance automation is already set to evasive for transport fleets."
+
+ afc_constructor_fleet_stance_already_disabled: "Fleet stance automation is already disabled for construction ships."
+ afc_constructor_fleet_stance_already_passive: "Fleet stance automation is already set to passive for construction ships."
+ afc_constructor_fleet_stance_already_evasive: "Fleet stance automation is already set to evasive for construction ships."
+
+ afc_science_fleet_stance_already_disabled: "Fleet stance automation is already disabled for science ships."
+ afc_science_fleet_stance_already_passive: "Fleet stance automation is already set to passive for science ships."
+ afc_science_fleet_stance_already_evasive: "Fleet stance automation is already set to evasive for science ships."
+
+ afc_manage_military_fleet_stance_text: "Military Fleet Stance"
+ afc_manage_bombardment_stance_text: "Bombardment Stance"
+ afc_manage_transport_fleet_stance_text: "Transport Fleet Stance"
+ afc_manage_constructor_fleet_stance_text: "Construction Ship Stance"
+ afc_manage_science_fleet_stance_text: "Science Ship Stance"
+
+ edict_afc_manage_colossus_automation_edict: "Colossus Automation"
+ edict_afc_manage_colossus_automation_edict_desc: "Choose what fleet stance and auto-targeting your colossus should use."
+
+ afc_manage_colossus_automation_event: "Manage Colossus Automation"
+ afc_manage_colossus_automation_event_desc: "Choose what fleet stance and auto-targeting your colossus should use. The auto-targeting options work as follows:\n\nSame System - Colossus will automatically destroy hostile colonies within the same system as it.\n\nAny System - Colossus will automatically destroy hostile colonies within any occupied/friendly system.\n\nNOTE: Automatic colossus orders cannot be manually interrupted. This will hopefully be fixed in a future update."
+
+ afc_colossus_fleet_stance_already_disabled: "Fleet stance automation is already disabled for colossi."
+ afc_colossus_fleet_stance_already_aggressive: "Fleet stance automation is already set to aggressive for colossi."
+ afc_colossus_fleet_stance_already_passive: "Fleet stance automation is already set to passive for colossi."
+ afc_colossus_fleet_stance_already_evasive: "Fleet stance automation is already set to evasive for colossi."
+
+ afc_colossus_auto_target_already_disabled: "Colossus auto-targeting is already disabled."
+ afc_colossus_auto_target_already_same_system: "Colossus auto-targeting is already set to same system."
+ afc_colossus_auto_target_already_any_system: "Colossus auto-targeting is already set to any system."
+
+ afc_manage_colossus_fleet_stance_text: "Colossus Fleet Stance"
+ afc_manage_colossus_auto_target_text: "Colossus Auto-Target"

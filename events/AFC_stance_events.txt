@@ -1,0 +1,214 @@
+namespace = afc_stances
+
+# general automatic fleet stance event
+# triggers events for specific fleet stance categories where applicable
+country_event = {
+	id = afc_stances.100
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+	}
+
+	immediate = {
+		# delegate each fleet stance "group" to its own event
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = afc_auto_military_fleet_stance_aggressive
+					has_country_flag = afc_auto_military_fleet_stance_passive
+				}
+			}
+			country_event = { id = afc_stances.101 } # military fleet stance
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = afc_auto_bombardment_stance_selective
+					has_country_flag = afc_auto_bombardment_stance_indiscriminate
+					has_country_flag = afc_auto_bombardment_stance_armageddon
+					has_country_flag = afc_auto_bombardment_stance_pox
+					has_country_flag = afc_auto_bombardment_stance_raiding
+				}
+			}
+			country_event = { id = afc_stances.102 } # bombardment stance
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = afc_auto_transport_fleet_stance_aggressive
+					has_country_flag = afc_auto_transport_fleet_stance_passive
+					has_country_flag = afc_auto_transport_fleet_stance_evasive
+				}
+			}
+			country_event = { id = afc_stances.103 } # army transport fleet stance
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = afc_auto_constructor_fleet_stance_passive
+					has_country_flag = afc_auto_constructor_fleet_stance_evasive
+				}
+			}
+			country_event = { id = afc_stances.104 } # construction ship stance
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = afc_auto_science_fleet_stance_passive
+					has_country_flag = afc_auto_science_fleet_stance_evasive
+				}
+			}
+			country_event = { id = afc_stances.105 } # science ship stance
+		}
+	}
+}
+
+# automatically set military fleet stances
+country_event = {
+	id = afc_stances.101
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = { # aggressive fleet stance
+			limit = { has_country_flag = afc_auto_military_fleet_stance_aggressive }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_military }
+				set_fleet_stance = aggressive
+			}
+		}
+		if = { # passive fleet stance
+			limit = { has_country_flag = afc_auto_military_fleet_stance_passive }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_military }
+				set_fleet_stance = passive
+			}
+		}
+	}
+}
+
+# automatically set bombardment stances
+country_event = {
+	id = afc_stances.102
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = { # selective bombardment
+			limit = { has_country_flag = afc_auto_bombardment_stance_selective }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_military }
+				set_fleet_bombardment_stance = selective
+			}
+		}
+		if = { # indiscriminate bombardment
+			limit = { has_country_flag = afc_auto_bombardment_stance_indiscriminate }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_military }
+				set_fleet_bombardment_stance = indiscriminate
+			}
+		}
+		if = { # armageddon bombardment
+			limit = { has_country_flag = afc_auto_bombardment_stance_armageddon }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_military }
+				set_fleet_bombardment_stance = armageddon
+			}
+		}
+		if = { # pox bombardment
+			limit = { has_country_flag = afc_auto_bombardment_stance_pox }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_military }
+				set_fleet_bombardment_stance = pox
+			}
+		}
+		if = { # raiding bombardment
+			limit = { has_country_flag = afc_auto_bombardment_stance_raiding }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_military }
+				set_fleet_bombardment_stance = raiding
+			}
+		}
+	}
+}
+
+# automatically set army transport fleet stances
+country_event = {
+	id = afc_stances.103
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = { # aggressive fleet stance
+			limit = { has_country_flag = afc_auto_transport_fleet_stance_aggressive }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_transport }
+				set_fleet_stance = aggressive
+			}
+		}
+		if = { # passive fleet stance
+			limit = { has_country_flag = afc_auto_transport_fleet_stance_passive }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_transport }
+				set_fleet_stance = passive
+			}
+		}
+		if = { # evasive fleet stance
+			limit = { has_country_flag = afc_auto_transport_fleet_stance_evasive }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_transport }
+				set_fleet_stance = evasive
+			}
+		}
+	}
+}
+
+# automatically set construction ship stances
+country_event = {
+	id = afc_stances.104
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = { # passive fleet stance
+			limit = { has_country_flag = afc_auto_constructor_fleet_stance_passive }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_constructor }
+				set_fleet_stance = passive
+			}
+		}
+		if = { # evasive fleet stance
+			limit = { has_country_flag = afc_auto_constructor_fleet_stance_evasive }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_constructor }
+				set_fleet_stance = evasive
+			}
+		}
+	}
+}
+
+# automatically set science ship stances
+country_event = {
+	id = afc_stances.105
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = { # passive fleet stance
+			limit = { has_country_flag = afc_auto_science_fleet_stance_passive }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_science_ship }
+				set_fleet_stance = passive
+			}
+		}
+		if = { # evasive fleet stance
+			limit = { has_country_flag = afc_auto_science_fleet_stance_evasive }
+			every_controlled_fleet = {
+				limit = { is_ship_class = shipclass_science_ship }
+				set_fleet_stance = evasive
+			}
+		}
+	}
+}

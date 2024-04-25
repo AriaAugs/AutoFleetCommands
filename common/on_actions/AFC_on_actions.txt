@@ -1,0 +1,164 @@
+# this = country
+on_monthly_pulse_country = {
+	events = {
+		afc_stances.100
+		afc_colossus.100
+		afc_bombardment.100
+	}
+}
+
+# A fleet has entered a system | See also: on_fleet_auto_move_arrival
+# Scope = Fleet
+# From = System
+on_entering_system_fleet = {
+	events = {
+		afc_colossus.204
+		afc_bombardment.200
+	}
+}
+
+# THIS = System: system whos controller has changed
+# FROM = Country: New controller of the system
+# FROMFROM = Country: Old controller of the system
+on_system_controller_changed = {
+	events = { afc_colossus.500 }
+}
+
+# A colony has been destroyed. Called just before owner and controller is cleared
+# Scope = Planet
+on_colony_destroyed = {
+	events = { afc_colossus.300 }
+}
+
+# A planets controller becomes a country not the same as the owner.
+# Root = Planet
+# From = Planet Owner
+# FromFrom = Planet Controller (the one occupying)
+on_planet_occupied = {
+	events = { afc_bombardment.201 }
+}
+
+# A planets controller becomes the owner of the planet.
+# Root = Planet
+# From = Planet Owner
+# FromFrom = Previous Planet Controller (the one who was occupying)
+on_planet_returned = {
+	events = { afc_bombardment.201 }
+}
+
+###########################
+###########################
+##						 ##
+##  COLOSSUS ON_ACTIONS  ##
+##						 ##
+###########################
+###########################
+
+# Scope:
+# this/root = planet that have been fired upon
+# from = fleet that fired
+# on_destroy_planet_with_PLANET_DESTRUCTION_COMPONENT = {
+#	events = {
+#		planet_destruction.1
+#	}
+# }
+
+# Note: The _queued on_actions also fire when the command is made even if there is nothing else in the queue
+# Similarly, the _unqueued on_actions fire even if you cancel the order while the weapon is on the wind-up to fire
+# They use the same scopes as the standard events
+
+on_destroy_planet_with_PLANET_KILLER_CRACKER = {
+	events = { afc_colossus.300 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_CRACKER_queued = {
+	events = { afc_colossus.301 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_CRACKER_unqueued = {
+	events = { afc_colossus.302 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_SHIELDER = {
+	events = { afc_colossus.300 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_SHIELDER_queued = {
+	events = { afc_colossus.301 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_SHIELDER_unqueued = {
+	events = { afc_colossus.302 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_NEUTRON = {
+	events = { afc_colossus.300 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_NEUTRON_queued = {
+	events = { afc_colossus.301 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_NEUTRON_unqueued = {
+	events = { afc_colossus.302 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_GODRAY = {
+	events = { afc_colossus.300 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_GODRAY_queued = {
+	events = { afc_colossus.301 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_GODRAY_unqueued = {
+	events = { afc_colossus.302 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_NANOBOTS = {
+	events = { afc_colossus.300 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_NANOBOTS_queued = {
+	events = { afc_colossus.301 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_NANOBOTS_unqueued = {
+	events = { afc_colossus.302 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_DELUGE = {
+	events = { afc_colossus.300 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_DELUGE_queued = {
+	events = { afc_colossus.301 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_DELUGE_unqueued = {
+	events = { afc_colossus.302 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_TOXIFIER = {
+	events = { afc_colossus.300 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_TOXIFIER_queued = {
+	events = { afc_colossus.301 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_TOXIFIER_unqueued = {
+	events = { afc_colossus.302 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_DEVOLUTION = {
+	events = { afc_colossus.300 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_DEVOLUTION_queued = {
+	events = { afc_colossus.301 }
+}
+
+on_destroy_planet_with_PLANET_KILLER_DEVOLUTION_unqueued = {
+	events = { afc_colossus.302 }
+}

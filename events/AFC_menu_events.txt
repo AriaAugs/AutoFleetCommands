@@ -1,0 +1,61 @@
+namespace = afc_menu
+
+# manage fleet automation event
+# used to open the fleet automation management window
+country_event = {
+	id = afc_menu.100
+	is_triggered_only = yes
+	title = afc_manage_fleet_automation_event
+	desc = afc_manage_fleet_automation_event_desc
+	diplomatic = yes
+	custom_gui = afc_fleet_automation_menu
+	auto_opens = yes
+
+	option = { name = CLOSE }
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = afc_stances.100
+			}
+		}
+	}
+}
+
+# manage planetary bombardment automation event
+# used to open the bombardment automation management window
+country_event = {
+	id = afc_menu.200
+	is_triggered_only = yes
+	title = afc_manage_auto_bombardment_event
+	desc = afc_manage_auto_bombardment_event_desc
+	diplomatic = yes
+	custom_gui = afc_bombadment_automation_menu
+	auto_opens = yes
+
+	option = { name = CLOSE }
+	after = {
+		hidden_effect = {
+			country_event = { id = afc_bombardment.100 }
+		}
+	}
+}
+
+# manage colossus automation event
+# used to open the colossus automation management window
+country_event = {
+	id = afc_menu.300
+	is_triggered_only = yes
+	title = afc_manage_colossus_automation_event
+	desc = afc_manage_colossus_automation_event_desc
+	diplomatic = yes
+	custom_gui = afc_colossus_automation_menu
+	auto_opens = yes
+
+	option = { name = CLOSE }
+	after = {
+		hidden_effect = {
+			country_event = { id = afc_colossus.100 }
+			country_event = { id = afc_colossus.400 }
+		}
+	}
+}

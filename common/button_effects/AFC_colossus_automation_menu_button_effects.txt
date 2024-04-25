@@ -1,0 +1,126 @@
+afc_set_colossus_fleet_stance_disabled = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_colossus_fleet_stance_already_disabled
+			from = {
+				OR = {
+					has_country_flag = afc_auto_colossus_fleet_stance_aggressive
+					has_country_flag = afc_auto_colossus_fleet_stance_passive
+					has_country_flag = afc_auto_colossus_fleet_stance_evasive
+				}
+			}
+		}
+	}
+	effect = {
+		from = { afc_clear_colossus_fleet_stance_flags = yes }
+	}
+}
+
+afc_set_colossus_fleet_stance_aggressive = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_colossus_fleet_stance_already_aggressive
+			from = {
+				NOT = { has_country_flag = afc_auto_colossus_fleet_stance_aggressive }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_colossus_fleet_stance_flags = yes
+			set_country_flag = afc_auto_colossus_fleet_stance_aggressive
+		}
+	}
+}
+
+afc_set_colossus_fleet_stance_passive = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_colossus_fleet_stance_already_passive
+			from = {
+				NOT = { has_country_flag = afc_auto_colossus_fleet_stance_passive }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_colossus_fleet_stance_flags = yes
+			set_country_flag = afc_auto_colossus_fleet_stance_passive
+		}
+	}
+}
+
+afc_set_colossus_fleet_stance_evasive = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_colossus_fleet_stance_already_evasive
+			from = {
+				NOT = { has_country_flag = afc_auto_colossus_fleet_stance_evasive }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_colossus_fleet_stance_flags = yes
+			set_country_flag = afc_auto_colossus_fleet_stance_evasive
+		}
+	}
+}
+
+afc_set_colossus_auto_target_disabled = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_colossus_auto_target_already_disabled
+			from = {
+				OR = {
+					has_country_flag = afc_auto_colossus_target_same_system
+					has_country_flag = afc_auto_colossus_target_any_system
+				}
+			}
+		}
+	}
+	effect = {
+		from = { afc_clear_colossus_auto_target_flags = yes }
+	}
+}
+
+afc_set_colossus_auto_target_same_system = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_colossus_auto_target_already_same_system
+			from = {
+				NOT = { has_country_flag = afc_auto_colossus_target_same_system }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_colossus_auto_target_flags = yes
+			set_country_flag = afc_auto_colossus_target_same_system
+		}
+	}
+}
+
+afc_set_colossus_auto_target_any_system = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_colossus_auto_target_already_any_system
+			from = {
+				NOT = { has_country_flag = afc_auto_colossus_target_any_system }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_colossus_auto_target_flags = yes
+			set_country_flag = afc_auto_colossus_target_any_system
+		}
+	}
+}

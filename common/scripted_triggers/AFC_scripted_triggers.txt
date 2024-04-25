@@ -1,0 +1,52 @@
+# trigger to check if planet is a colony, hostile, not auto-targetted by any other colossus, and valid for this colossus to target
+# root = colossus fleet
+# this = planet/colony
+valid_auto_colossus_target = {
+	is_colony = yes
+	exists = owner
+	owner = { is_hostile = root.controller }
+	NOT = { has_planet_flag = afc_auto_targeted_by_colossus } # not targeted by any other colossus in the system
+	if = {
+		limit = { has_planet_flag = afc_auto_targeted_by_colossus_enroute } # if targeted by a colossus enroute
+		has_planet_flag = afc_auto_colossus_enroute_id_@root # the calling fleet is the colossus enroute
+	}
+	if = {
+		limit = { root = { any_controlled_ship = { has_component = PLANET_KILLER_CRACKER } } }
+		can_destroy_planet_with_PLANET_KILLER_CRACKER = { from = root }
+	}
+	else_if = {
+		limit = { root = { any_controlled_ship = { has_component = PLANET_KILLER_SHIELDER } } }
+		can_destroy_planet_with_PLANET_KILLER_SHIELDER = { from = root }
+	}
+	else_if = {
+		limit = { root = { any_controlled_ship = { has_component = PLANET_KILLER_NEUTRON } } }
+		can_destroy_planet_with_PLANET_KILLER_NEUTRON = { from = root }
+	}
+	else_if = {
+		limit = { root = { any_controlled_ship = { has_component = PLANET_KILLER_GODRAY } } }
+		can_destroy_planet_with_PLANET_KILLER_GODRAY = { from = root }
+	}
+	else_if = {
+		limit = { root = { any_controlled_ship = { has_component = PLANET_KILLER_NANOBOTS } } }
+		can_destroy_planet_with_PLANET_KILLER_NANOBOTS = { from = root }
+	}
+	else_if = {
+		limit = { root = { any_controlled_ship = { has_component = PLANET_KILLER_DELUGE } } }
+		can_destroy_planet_with_PLANET_KILLER_DELUGE = { from = root }
+	}
+	else_if = {
+		limit = { root = { any_controlled_ship = { has_component = PLANET_KILLER_TOXIFIER } } }
+		can_destroy_planet_with_PLANET_KILLER_TOXIFIER = { from = root }
+	}
+	else_if = {
+		limit = { root = { any_controlled_ship = { has_component = PLANET_KILLER_DEVOLUTION } } }
+		can_destroy_planet_with_PLANET_KILLER_DEVOLUTION = { from = root }
+	}
+}
+
+# trigger to check if the selected fleet is a colossus
+# this = fleet
+is_colossus_fleet = {
+	is_ship_class = shipclass_military_special
+	any_controlled_ship = { is_ship_size = colossus }
+}

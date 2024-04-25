@@ -1,0 +1,195 @@
+#################################
+##							   ##
+##  AUTO BOMBARDMENT SETTINGS  ##
+##							   ##
+#################################
+
+afc_set_auto_bombardment_target_disabled = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_auto_bombardment_target_already_disabled
+			from = {
+				OR = {
+					has_country_flag = afc_auto_bombardment_target_random
+					has_country_flag = afc_auto_bombardment_target_army
+					has_country_flag = afc_auto_bombardment_target_pops
+				}
+			}
+		}
+	}
+	effect = {
+		from = { afc_clear_auto_bombardment_target_flags = yes }
+	}
+}
+
+afc_set_auto_bombardment_target_random = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_auto_bombardment_target_already_random
+			from = {
+				NOT = { has_country_flag = afc_auto_bombardment_target_random }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_auto_bombardment_target_flags = yes
+			set_country_flag = afc_auto_bombardment_target_random
+		}
+	}
+}
+
+afc_set_auto_bombardment_target_army = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_auto_bombardment_target_already_army
+			from = {
+				NOT = { has_country_flag = afc_auto_bombardment_target_army }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_auto_bombardment_target_flags = yes
+			set_country_flag = afc_auto_bombardment_target_army
+		}
+	}
+}
+
+afc_set_auto_bombardment_target_pops = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_auto_bombardment_target_already_pops
+			from = {
+				NOT = { has_country_flag = afc_auto_bombardment_target_pops }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_auto_bombardment_target_flags = yes
+			set_country_flag = afc_auto_bombardment_target_pops
+		}
+	}
+}
+
+#####################################
+##								   ##
+##  BOMBARDMENT TARGET LOCK TIMES  ##
+##								   ##
+#####################################
+
+afc_set_bombardment_target_lock_time_forever = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_bombardment_target_lock_time_already_forever
+			from = {
+				OR = {
+					has_country_flag = afc_bombardment_target_lock_two
+					has_country_flag = afc_bombardment_target_lock_three
+					has_country_flag = afc_bombardment_target_lock_four
+					has_country_flag = afc_bombardment_target_lock_six
+					has_country_flag = afc_bombardment_target_lock_twelve
+				}
+			}
+		}
+	}
+	effect = {
+		from = { afc_clear_bombardment_target_lock_flags = yes }
+	}
+}
+
+afc_set_bombardment_target_lock_time_two = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_bombardment_target_lock_time_already_two
+			from = {
+				NOT = { has_country_flag = afc_bombardment_target_lock_two }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_bombardment_target_lock_flags = yes
+			set_country_flag = afc_bombardment_target_lock_two
+		}
+	}
+}
+
+afc_set_bombardment_target_lock_time_three = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_bombardment_target_lock_time_already_three
+			from = {
+				NOT = { has_country_flag = afc_bombardment_target_lock_three }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_bombardment_target_lock_flags = yes
+			set_country_flag = afc_bombardment_target_lock_three
+		}
+	}
+}
+
+afc_set_bombardment_target_lock_time_four = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_bombardment_target_lock_time_already_four
+			from = {
+				NOT = { has_country_flag = afc_bombardment_target_lock_four }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_bombardment_target_lock_flags = yes
+			set_country_flag = afc_bombardment_target_lock_four
+		}
+	}
+}
+
+afc_set_bombardment_target_lock_time_six = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_bombardment_target_lock_time_already_six
+			from = {
+				NOT = { has_country_flag = afc_bombardment_target_lock_six }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_bombardment_target_lock_flags = yes
+			set_country_flag = afc_bombardment_target_lock_six
+		}
+	}
+}
+
+afc_set_bombardment_target_lock_time_twelve = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_bombardment_target_lock_time_already_twelve
+			from = {
+				NOT = { has_country_flag = afc_bombardment_target_lock_twelve }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_bombardment_target_lock_flags = yes
+			set_country_flag = afc_bombardment_target_lock_twelve
+		}
+	}
+}

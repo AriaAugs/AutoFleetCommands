@@ -1,0 +1,548 @@
+namespace = afc_colossus
+
+# triggers events for automatic colossus control as applicable
+# triggered monthly and when closing the colossus automation settings
+# this = country
+country_event = {
+	id = afc_colossus.100
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { # trigger only for player empires that control a colossus
+		is_ai = no
+		has_ascension_perk = ap_colossus
+		any_controlled_fleet = {
+			is_colossus_fleet = yes
+		}
+	}
+
+	immediate = {
+		# blindly call fleet events for all colossus fleets since the events check for country flags
+		every_controlled_fleet = {
+			limit = { is_colossus_fleet = yes }
+			fleet_event = { id = afc_colossus.101 } # fleet stance
+			fleet_event = { id = afc_colossus.200 } # auto-target
+		}
+	}
+}
+
+# set the colossus fleet stance
+# triggered by afc_colossus.100
+# this = fleet
+fleet_event = {
+	id = afc_colossus.101
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { is_colossus_fleet = yes } # redundant check that this is a colossus
+
+	immediate = {
+		if = {
+			limit = { controller = { has_country_flag = afc_auto_colossus_fleet_stance_aggressive } }
+			set_fleet_stance = aggressive
+		}
+		else_if = {
+			limit = { controller = { has_country_flag = afc_auto_colossus_fleet_stance_passive } }
+			set_fleet_stance = passive
+		}
+		else_if = {
+			limit = { controller = { has_country_flag = afc_auto_colossus_fleet_stance_evasive } }
+			set_fleet_stance = evasive
+		}
+	}
+}
+
+# colossus auto-target wrapper - call specific auto-target events as necessary
+# triggered by afc_colossus.100, and indirectly when a colossus destroys a planet (via afc_colossus.300)
+# this = fleet
+fleet_event = {
+	id = afc_colossus.200
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		controller = { is_ai = no } # added check for player empire only since this can be triggered by afc_colossus.300
+		# redundant checks that this is a colossus
+		is_colossus_fleet = yes
+		# require the colossus to be idle - we don't want to take control away from the player
+		is_fleet_idle = yes
+	}
+
+	immediate = {
+		if = {
+			limit = { controller = { has_country_flag = afc_auto_colossus_target_same_system } }
+			fleet_event = { id = afc_colossus.201 }
+		}
+		else_if = {
+			limit = { controller = { has_country_flag = afc_auto_colossus_target_any_system } }
+			fleet_event = { id = afc_colossus.202 }
+		}
+	}
+}
+
+# order colossus to fire on the nearest enemy colony within the same system
+# triggered by afc_colossus.200 and afc_colossus.202
+# this = fleet
+fleet_event = {
+	id = afc_colossus.201
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		# redundant checks that this is a colossus
+		is_colossus_fleet = yes
+		# require the colossus to be idle - we don't want to take control away from the player
+		is_fleet_idle = yes
+	}
+
+	immediate = {
+		# probably not necessary, but good to be safe
+		clear_orders = yes
+		clear_fleet_actions = this
+		# queue destroy planet order
+		queue_actions = {
+			# find the nearest planet to destroy
+			find_closest_planet = {
+				trigger = {
+					id = "afc_colossus.201.trigger.1"
+					valid_auto_colossus_target = yes
+				}
+				found_planet = {
+					destroy_planet = { target = this }
+				}
+			}
+		}
+	}
+}
+
+# wrapper for any system targeting - check for targets in same system before searching any system
+# triggered by afc_colossus.200
+# this = fleet
+fleet_event = {
+	id = afc_colossus.202
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		# redundant checks that this is a colossus
+		is_colossus_fleet = yes
+		# require the colossus to be idle - we don't want to take control away from the player
+		is_fleet_idle = yes
+	}
+
+	immediate = {
+		# check first if there's any valid targets in the current system
+		if = {
+			limit = {
+				solar_system = { any_system_colony = { valid_auto_colossus_target = yes } }
+			}
+			fleet_event = { id = afc_colossus.201 } # use the same-system auto-target event
+		}
+		else = { # no valid targets within the same system
+			fleet_event = { id = afc_colossus.203 } # use the any-system auto-target event
+		}
+	}
+}
+
+# order colossus to target a random enemy colony within the nearest occupied system and move to that system
+# NOTE: this doesn't actually queue the destroy_planet order, it only flags the colony for destruction
+# this = fleet
+fleet_event = {
+	id = afc_colossus.203
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		# redundant checks that this is a colossus
+		is_colossus_fleet = yes
+		# require the colossus to be idle - we don't want to take control away from the player
+		is_fleet_idle = yes
+	}
+
+	immediate = {
+		# probably not necessary, but good to be safe
+		clear_orders = yes
+		clear_fleet_actions = this
+		# queue order to move to nearest system with valid targets
+		queue_actions = {
+			# find the nearest occupied system with valid auto colossus targets
+			find_closest_system = {
+				trigger = {
+					id = "afc_colossus.203.trigger.1"
+					# TODO - simplify the trigger to check if the system is safe
+					exists = starbase
+					starbase = { # starbase is controlled by us or a non-hostile empire
+						controller = {
+							OR = {
+								is_same_value = root.owner
+								NOT = { is_hostile = root.owner }
+							}
+						}
+					}
+					any_system_colony = { valid_auto_colossus_target = yes } # system has a valid auto colossus target
+				}
+				found_system = {
+					effect = { # mark a random target colony for destruction and this colossus as enroute
+						id = "afc_colossus.203.effect.1"
+						random_system_colony = {
+							limit = { valid_auto_colossus_target = yes }
+							set_timed_planet_flag = { # planet flag to specify that a coossus is enroute
+								flag = afc_auto_targeted_by_colossus_enroute
+								years = 5
+							}
+							set_timed_planet_flag = {
+								flag = afc_auto_colossus_enroute_id_@root
+								years = 5
+							}
+							root = {
+								if = {
+									limit = { NOT = { has_fleet_flag = afc_auto_targeting_active } }
+									set_fleet_flag = afc_auto_targeting_active
+								}
+								set_timed_fleet_flag = {
+									flag = afc_auto_targeting_enroute_system_@prevprev
+									years = 5
+								}
+								set_timed_fleet_flag = {
+									flag = afc_auto_targeting_enroute_colony_@prev
+									years = 5
+								}
+							}
+						}
+					}
+					move_to = this
+				}
+			}
+		}
+	}
+}
+
+# order colossus to destroy the colony it was enroute to destroy
+# this prevents the colossus from idling around when it enters the system and instead makes it immediately go to destroy its target
+# triggered from on_entering_system_fleet
+# this = fleet
+# from = system
+fleet_event = {
+	id = afc_colossus.204
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_colossus_fleet = yes # is this a colossus
+		has_fleet_flag = afc_auto_targeting_enroute_system_@from # was it auto-targeting this system
+		controller = { # is the colossus controlled by a player using any-system targeting
+			is_ai = no
+			has_country_flag = afc_auto_colossus_target_any_system
+		}
+	}
+
+	immediate = {
+		# since we arrived, clear the "enroute to system" flag
+		remove_fleet_flag = afc_auto_targeting_enroute_system_@from
+		# probably not necessary, but good to be safe
+		clear_orders = yes
+		clear_fleet_actions = this
+		# queue destroy planet order
+		queue_actions = {
+			find_closest_planet = {
+				trigger = { # 
+					id = "afc_colossus.204.trigger.1"
+					valid_auto_colossus_target = yes # somewhat redundant check, but something could've happened to the colony while we were traveling
+					has_planet_flag = afc_auto_colossus_enroute_id_@root # make sure we target the planet we came here to destroy
+				}
+				found_planet = {
+					effect = { # clear the enroute flags from the planet and colossus
+						id = "afc_colossus.204.effect.1"
+						remove_planet_flag = afc_auto_targeted_by_colossus_enroute
+						remove_planet_flag = afc_auto_colossus_enroute_id_@root
+						root = { remove_fleet_flag = afc_auto_targeting_enroute_colony_@prev }
+					}
+					destroy_planet = { target = this }
+				}
+			}
+		}
+	}
+}
+
+# planet was destroyed by a colossus - queue up the next order for the colossus if it's automated
+# cancel the orders of any automated colossi coming to destroy the planet (in the case that the planet wasn't destroyed by an automated colossus)
+# triggered by on_destroy_planet_with_PLANET_DESTRUCTION_COMPONENT and on_colony_destroyed
+# from = fleet (when triggered by on_destroy_planet_with_PLANET_DESTRUCTION_COMPONENT)
+# from = none (when triggered by on_colony_destroyed)
+# this/root = planet
+planet_event = {
+	id = afc_colossus.300
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		# always trigger
+	}
+
+	immediate = {
+		# clear the flags from the planet and colossus (if they have them)
+		if = {
+			limit = { has_planet_flag = afc_auto_targeted_by_colossus }
+			remove_planet_flag = afc_auto_targeted_by_colossus
+		}
+		if = { # clear the flags from the colossus and order it to target another planet only if a colossus destroyed the colony
+			limit = {
+				exists = from
+				from = { is_scope_type = fleet }
+			}
+			from = { 
+				if = {
+					limit = { has_fleet_flag = afc_auto_targeting_@root }
+					remove_fleet_flag = afc_auto_targeting_active
+					remove_fleet_flag = afc_auto_targeting_@root
+				}
+				# have the attacking colossus find a new target (afc_colossus.200 checks for colossus automation flags)
+				fleet_event = {
+					id = afc_colossus.200
+					days = 1
+				}
+			}
+		}
+		# cancel the orders of any other automated colossus targeting or enroute to this planet
+		every_country = {
+			limit = { # is player empire using colossus automation
+				is_ai = no
+				OR = {
+					has_country_flag = afc_auto_colossus_target_same_system
+					has_country_flag = afc_auto_colossus_target_any_system
+				}
+			}
+			every_controlled_fleet = {
+				limit = {
+					is_colossus_fleet = yes
+					has_fleet_flag = afc_auto_targeting_active
+				}
+				if = {
+					limit = { has_fleet_flag = afc_auto_targeting_@root } # colossus is in the same system and targeting the planet
+					remove_fleet_flag = afc_auto_targeting_@root
+					remove_fleet_flag = afc_auto_targeting_active
+					clear_orders = yes
+					clear_fleet_actions = this
+					fleet_event = {
+						id = afc_colossus.200
+						days = 1
+					}
+				}
+				if = {
+					limit = { has_fleet_flag = afc_auto_targeting_enroute_colony_@root } # colossus is enroute to the system
+					root = {
+						remove_planet_flag = afc_auto_targeted_by_colossus_enroute
+						remove_planet_flag = afc_auto_colossus_enroute_id_@prev
+						solar_system = {
+							prevprev = { # use this mess of scoping to remove the "enroute to system" fleet flag from the colossus
+								remove_fleet_flag = afc_auto_targeting_enroute_system_@prev
+							}
+						}
+					}
+					remove_fleet_flag = afc_auto_targeting_active
+					remove_fleet_flag = afc_auto_targeting_enroute_colony_@root
+					clear_orders = yes
+					clear_fleet_actions = this
+					fleet_event = {
+						id = afc_colossus.200
+						days = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+# destroy_planet order has been queued, flag the targeted planet for destruction if the attacking colossus is automated
+# triggered by on_destroy_planet_with_PLANET_DESTRUCTION_COMPONENT_queued
+# from = fleet
+# this/root = planet
+planet_event = {
+	id = afc_colossus.301
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { # make sure this is a player empire using colossus automation before setting flags
+		from.controller = {
+			is_ai = no
+			OR = {
+				has_country_flag = afc_auto_colossus_target_same_system
+				has_country_flag = afc_auto_colossus_target_any_system
+			}
+		}
+	}
+
+	immediate = {
+		set_timed_planet_flag = {
+			flag = afc_auto_targeted_by_colossus
+			years = 1
+		}
+		from = {
+			set_timed_fleet_flag = {
+				flag = afc_auto_targeting_@root
+				years = 1
+			}
+			if = {
+				limit = { NOT = { has_fleet_flag = afc_auto_targeting_active } }
+				set_fleet_flag = afc_auto_targeting_active
+			}
+		}
+	}
+}
+
+# destroy_planet order has been unqueued, remove flags from the targeted planet if the (formerly) attacking colossus is automated
+# triggered by on_destroy_planet_with_PLANET_DESTRUCTION_COMPONENT_unqueued
+# from = fleet
+# this/root = planet
+planet_event = { # destroy planet order unqueued on this by from
+	id = afc_colossus.302
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		remove_planet_flag = afc_auto_targeted_by_colossus
+		from = {
+			remove_fleet_flag = afc_auto_targeting_active
+			remove_fleet_flag = afc_auto_targeting_@root
+		}
+	}
+}
+
+# clears automated colossus orders when the player disables colossus automation
+# triggered when closing the colossus automation settings
+# this = country
+country_event = {
+	id = afc_colossus.400
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { # trigger only for player empires that control a colossus
+		is_ai = no
+		NOR = {
+			has_country_flag = afc_auto_colossus_target_same_system
+			has_country_flag = afc_auto_colossus_target_any_system
+		}
+		any_controlled_fleet = {
+			is_colossus_fleet = yes
+			has_fleet_flag = afc_auto_targeting_active
+		}
+	}
+
+	immediate = {
+		every_galaxy_planet = { # search all galaxy planets
+			limit = {
+				OR = {
+					AND = { # planet is targeted by same-system colossus
+						has_planet_flag = afc_auto_targeted_by_colossus
+						root = {
+							any_controlled_fleet = {
+								is_colossus_fleet = yes
+								has_fleet_flag = afc_auto_targeting_@prevprev
+							}
+						}
+					}
+					AND = { # planet is targeted by enoute colossus
+						has_planet_flag = afc_auto_targeted_by_colossus_enroute
+						root = {
+							any_controlled_fleet = {
+								is_colossus_fleet = yes
+								has_fleet_flag = afc_auto_targeting_enroute_colony_@prevprev
+							}
+						}
+					}
+				}
+			}
+			if = { # targeted by same-system colossus
+				limit = { has_planet_flag = afc_auto_targeted_by_colossus }
+				remove_planet_flag = afc_auto_targeted_by_colossus
+				root = {
+					every_controlled_fleet = {
+						limit = {
+							is_colossus_fleet = yes
+							has_fleet_flag = afc_auto_targeting_@prevprev
+						}
+						clear_orders = yes
+						clear_fleet_actions = this
+						remove_fleet_flag = afc_auto_targeting_@prevprev
+						remove_fleet_flag = afc_auto_targeting_active
+					}
+				}
+			}
+			else = { # has_planet_flag = afc_auto_targeted_by_colossus_enroute
+				remove_planet_flag = afc_auto_targeted_by_colossus_enroute
+					root = {
+						every_controlled_fleet = {
+							limit = {
+								is_colossus_fleet = yes
+								has_fleet_flag = afc_auto_targeting_enroute_colony_@prevprev
+							}
+							clear_orders = yes
+							clear_fleet_actions = this
+							remove_fleet_flag = afc_auto_targeting_enroute_colony_@prevprev
+							remove_fleet_flag = afc_auto_targeting_active
+							prevprev = { remove_planet_flag = afc_auto_colossus_enroute_id_@prev }
+						}
+					}
+				solar_system = {
+					root = {
+						every_controlled_fleet = {
+							limit = {
+								is_colossus_fleet = yes
+								has_fleet_flag = afc_auto_targeting_enroute_system_@prevprev
+							}
+							remove_fleet_flag = afc_auto_targeting_enroute_system_@prevprev
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# clears automated colossus orders to move to this system if the new system controller is hostile
+# triggered by on_system_controller_changed
+# THIS = System: system whos controller has changed
+# FROM = Country: New controller of the system
+# FROMFROM = Country: Old controller of the system
+system_event = {
+	id = afc_colossus.500
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_system_colony = { has_planet_flag = afc_auto_targeted_by_colossus_enroute }
+	}
+
+	immediate = {
+		every_country = {
+			limit = {
+				is_ai = no
+				has_country_flag = afc_auto_colossus_target_any_system
+				any_controlled_fleet = {
+					is_colossus_fleet = yes
+					has_fleet_flag = afc_auto_targeting_enroute_system_@root
+				}
+				is_hostile = from
+			}
+			every_controlled_fleet = {
+				limit = {
+					is_colossus_fleet = yes
+					has_fleet_flag = afc_auto_targeting_enroute_system_@root
+				}
+				clear_orders = yes
+				clear_fleet_actions = this
+				remove_fleet_flag = afc_auto_targeting_enroute_system_@root
+				remove_fleet_flag = afc_auto_targeting_active
+				root = {
+					random_system_colony = {
+						limit = { has_planet_flag = afc_auto_colossus_enroute_id_@prevprev }
+						remove_planet_flag = afc_auto_targeted_by_colossus_enroute
+						remove_planet_flag = afc_auto_colossus_enroute_id_@prevprev
+						prevprev = { remove_fleet_flag = afc_auto_targeting_enroute_colony_@prev }
+					}
+				}
+				fleet_event = { id = afc_colossus.200 }
+			}
+		}
+	}
+}

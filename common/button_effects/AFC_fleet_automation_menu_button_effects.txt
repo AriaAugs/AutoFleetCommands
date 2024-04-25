@@ -1,0 +1,416 @@
+##############################
+##							##
+##  MILITARY FLEET STANCES  ##
+##							##
+##############################
+
+afc_set_military_fleet_stance_disabled = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_military_fleet_stance_already_disabled
+			from = {
+				OR = {
+					has_country_flag = afc_auto_military_fleet_stance_aggressive
+					has_country_flag = afc_auto_military_fleet_stance_passive
+				}
+			}
+		}
+	}
+	effect = {
+		from = { afc_clear_military_fleet_stance_flags = yes }
+	}
+}
+
+afc_set_military_fleet_stance_aggressive = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_military_fleet_stance_already_aggressive
+			from = {
+				NOT = { has_country_flag = afc_auto_military_fleet_stance_aggressive }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_military_fleet_stance_flags = yes
+			set_country_flag = afc_auto_military_fleet_stance_aggressive
+		}
+	}
+}
+
+afc_set_military_fleet_stance_passive = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_military_fleet_stance_already_passive
+			from = {
+				NOT = { has_country_flag = afc_auto_military_fleet_stance_passive }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_military_fleet_stance_flags = yes
+			set_country_flag = afc_auto_military_fleet_stance_passive
+		}
+	}
+}
+
+#####################################
+##								   ##
+##  PLANETARY BOMBARDMENT STANCES  ##
+##								   ##
+#####################################
+
+afc_set_bombardment_stance_disabled = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_bombardment_stance_already_disabled
+			from = {
+				OR = {
+					has_country_flag = afc_auto_bombardment_stance_selective
+					has_country_flag = afc_auto_bombardment_stance_indiscriminate
+					has_country_flag = afc_auto_bombardment_stance_armageddon
+					has_country_flag = afc_auto_bombardment_stance_pox
+					has_country_flag = afc_auto_bombardment_stance_raiding
+				}
+			}
+		}
+	}
+	effect = {
+		from = { afc_clear_bombardment_stance_flags = yes }
+	}
+}
+
+afc_set_bombardment_stance_selective = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_bombardment_stance_already_selective
+			from = {
+				NOT = { has_country_flag = afc_auto_bombardment_stance_selective }
+			}
+		}
+		# since any country can use selective bombardment, no other checks are needed
+	}
+	effect = {
+		from = {
+			afc_clear_bombardment_stance_flags = yes
+			set_country_flag = afc_auto_bombardment_stance_selective
+		}
+	}
+}
+
+afc_set_bombardment_stance_indiscriminate = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_bombardment_stance_already_indiscriminate
+			from = {
+				NOT = { has_country_flag = afc_auto_bombardment_stance_indiscriminate }
+			}
+		}
+		custom_tooltip = {
+			fail_text = afc_cannot_bombard_indiscriminate
+			from = {
+				OR = {
+					has_policy_flag = orbital_bombardment_indiscriminate
+					has_policy_flag = orbital_bombardment_armageddon
+				}
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_bombardment_stance_flags = yes
+			set_country_flag = afc_auto_bombardment_stance_indiscriminate
+		}
+	}
+}
+
+afc_set_bombardment_stance_armageddon = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_bombardment_stance_already_armageddon
+			from = {
+				NOT = { has_country_flag = afc_auto_bombardment_stance_armageddon }
+			}
+		}
+		custom_tooltip = {
+			fail_text = afc_cannot_bombard_armageddon
+			from = {
+				OR = {
+					has_policy_flag = orbital_bombardment_armageddon
+					is_crisis_faction = yes
+					has_menace_perk = menp_death_from_above		# Menace Perk: Death From Above
+				}
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_bombardment_stance_flags = yes
+			set_country_flag = afc_auto_bombardment_stance_armageddon
+		}
+	}
+}
+
+afc_set_bombardment_stance_pox = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_bombardment_stance_already_pox
+			from = {
+				NOT = { has_country_flag = afc_auto_bombardment_stance_pox }
+			}
+		}
+		custom_tooltip = {
+			fail_text = afc_cannot_bombard_pox
+			from = {
+				has_relic = r_pox_sample
+				OR = {
+					has_policy_flag = orbital_bombardment_indiscriminate
+					has_policy_flag = orbital_bombardment_armageddon
+				}
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_bombardment_stance_flags = yes
+			set_country_flag = afc_auto_bombardment_stance_pox
+		}
+	}
+}
+
+afc_set_bombardment_stance_raiding = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_bombardment_stance_already_raiding
+			from = {
+				NOT = { has_country_flag = afc_auto_bombardment_stance_raiding }
+			}
+		}
+		custom_tooltip = {
+			fail_text = afc_cannot_bombard_raiding
+			from = {
+				OR = {
+					has_ascension_perk = ap_nihilistic_acquisition
+					has_valid_civic = civic_barbaric_despoilers
+					has_origin = origin_slavers
+					has_origin = origin_khan_successor
+				}
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_bombardment_stance_flags = yes
+			set_country_flag = afc_auto_bombardment_stance_raiding
+		}
+	}
+}
+
+###############################
+##							 ##
+##  TRANSPORT FLEET STANCES  ##
+##							 ##
+###############################
+
+afc_set_transport_fleet_stance_disabled = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_transport_fleet_stance_already_disabled
+			from = {
+				OR = {
+					has_country_flag = afc_auto_transport_fleet_stance_aggressive
+					has_country_flag = afc_auto_transport_fleet_stance_passive
+					has_country_flag = afc_auto_transport_fleet_stance_evasive
+				}
+			}
+		}
+	}
+	effect = {
+		from = { afc_clear_transport_fleet_stance_flags = yes }
+	}
+}
+
+afc_set_transport_fleet_stance_aggressive = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_transport_fleet_stance_already_aggressive
+			from = {
+				NOT = { has_country_flag = afc_auto_transport_fleet_stance_aggressive }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_transport_fleet_stance_flags = yes
+			set_country_flag = afc_auto_transport_fleet_stance_aggressive
+		}
+	}
+}
+
+afc_set_transport_fleet_stance_passive = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_transport_fleet_stance_already_passive
+			from = {
+				NOT = { has_country_flag = afc_auto_transport_fleet_stance_passive }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_transport_fleet_stance_flags = yes
+			set_country_flag = afc_auto_transport_fleet_stance_passive
+		}
+	}
+}
+
+afc_set_transport_fleet_stance_evasive = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_transport_fleet_stance_already_evasive
+			from = {
+				NOT = { has_country_flag = afc_auto_transport_fleet_stance_evasive }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_transport_fleet_stance_flags = yes
+			set_country_flag = afc_auto_transport_fleet_stance_evasive
+		}
+	}
+}
+
+#################################
+##							   ##
+##  CONSTRUCTOR FLEET STANCES  ##
+##							   ##
+#################################
+
+afc_set_constructor_fleet_stance_disabled = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_constructor_fleet_stance_already_disabled
+			from = {
+				OR = {
+					has_country_flag = afc_auto_constructor_fleet_stance_passive
+					has_country_flag = afc_auto_constructor_fleet_stance_evasive
+				}
+			}
+		}
+	}
+	effect = {
+		from = { afc_clear_constructor_fleet_stance_flags = yes }
+	}
+}
+
+afc_set_constructor_fleet_stance_passive = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_constructor_fleet_stance_already_passive
+			from = {
+				NOT = { has_country_flag = afc_auto_constructor_fleet_stance_passive }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_constructor_fleet_stance_flags = yes
+			set_country_flag = afc_auto_constructor_fleet_stance_passive
+		}
+	}
+}
+
+afc_set_constructor_fleet_stance_evasive = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_constructor_fleet_stance_already_evasive
+			from = {
+				NOT = { has_country_flag = afc_auto_constructor_fleet_stance_evasive }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_constructor_fleet_stance_flags = yes
+			set_country_flag = afc_auto_constructor_fleet_stance_evasive
+		}
+	}
+}
+
+#############################
+##						   ##
+##  SCIENCE FLEET STANCES  ##
+##						   ##
+#############################
+
+afc_set_science_fleet_stance_disabled = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_science_fleet_stance_already_disabled
+			from = {
+				OR = {
+					has_country_flag = afc_auto_science_fleet_stance_passive
+					has_country_flag = afc_auto_science_fleet_stance_evasive
+				}
+			}
+		}
+	}
+	effect = {
+		from = { afc_clear_science_fleet_stance_flags = yes }
+	}
+}
+
+afc_set_science_fleet_stance_passive = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_science_fleet_stance_already_passive
+			from = {
+				NOT = { has_country_flag = afc_auto_science_fleet_stance_passive }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_science_fleet_stance_flags = yes
+			set_country_flag = afc_auto_science_fleet_stance_passive
+		}
+	}
+}
+
+afc_set_science_fleet_stance_evasive = {
+	potential = { always = yes }
+	allow = {
+		custom_tooltip = {
+			fail_text = afc_science_fleet_stance_already_evasive
+			from = {
+				NOT = { has_country_flag = afc_auto_science_fleet_stance_evasive }
+			}
+		}
+	}
+	effect = {
+		from = {
+			afc_clear_science_fleet_stance_flags = yes
+			set_country_flag = afc_auto_science_fleet_stance_evasive
+		}
+	}
+}
